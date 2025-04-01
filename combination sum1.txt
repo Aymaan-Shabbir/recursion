@@ -1,0 +1,36 @@
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        int arr[] = {2,3,6,7};
+        int target = 7;
+        List<List<Integer>> result = new ArrayList<>();
+        
+        //using pick and not pick
+        
+        // as we can use the same values multiple times-> pick will always pick the same element updating list, same index, not pick will move further to the next index adding element to list.
+        
+        // base cases
+        // index reaches the end and target equals to zero
+        //while backtracking remove the element.
+        combiSum(0,arr,target,result,new ArrayList<>());
+        System.out.println(result);
+    }
+    public static void combiSum(int ind,int[]arr, int target, List<List<Integer>> result, List<Integer> list){
+        
+        if(ind == arr.length){
+            //base caes, if ind is equal to length of array return, or else if index is equal to length of array and target is equal to 0, add the corresponding list to result list and then return.
+            if(target==0){
+                result.add(new ArrayList<>(list));
+            }
+            return;
+        }
+        
+        if(arr[ind]<=target){
+            list.add(arr[ind]);
+            combiSum(ind,arr,target-arr[ind],result,list);
+            // [2,2,2], last 2 backtracks 
+            list.remove(list.size()-1);
+        }
+        combiSum(ind+1,arr,target,result,list);
+    }
+}
