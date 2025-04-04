@@ -1,0 +1,40 @@
+import java.util.*;
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        helper(result, new StringBuilder(), n, 0, 0);
+        return result;
+    }
+
+    // Recursive helper function to generate valid parentheses combinations
+    public void helper(List<String> result, StringBuilder temp, int n, int open, int close) {
+        // If the length of the current sequence is 2*n, add it to the result
+        if (temp.length() == 2 * n) {
+            result.add(temp.toString());
+            return;
+        }
+
+        // If we still have openings '(' left, add one and recurse
+        if (open < n) {
+            temp.append('(');
+            helper(result, temp, n, open + 1, close);
+            temp.deleteCharAt(temp.length() - 1); // Backtrack (remove last character)
+        }
+
+        // If the number of closing ')' is less than opening '(', add a closing bracket
+        if (close < open) {
+            temp.append(')');
+            helper(result, temp, n, open, close + 1);
+            temp.deleteCharAt(temp.length() - 1); // Backtrack
+        }
+    }
+
+    public static void main(String[] args) {
+    int n=3;
+    
+    List<String> result = new ArrayList<>();
+    result=generateParenthesis(n);
+    System.out.prinln(result);
+    }
+}
