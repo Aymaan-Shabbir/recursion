@@ -1,0 +1,52 @@
+class Solution {
+    // Global variable to track max number of valid requests
+    int result = 0;
+
+    public int maximumRequests(int n, int[][] requests) {
+        // Har building ka net employee change track karne ke liye array
+        int resultant[] = new int[n];
+
+        // Recursive function call to check all subsets of requests
+        helper(0, 0, n, requests, resultant);
+        return result;
+    }
+
+    // count → ab tak include kiye gaye valid requests ka count
+    // idx → current index in requests array
+    public void helper(int count, int idx, int n, int[][] requests, int[] resultant) {
+
+        // Base Case: jab saari requests dekh li (idx requests array ke bahar chala gaya)
+        if (idx >= requests.length) {
+            boolean allZeroes = true;
+
+            // Check karo ki sab buildings ka net employee change 0 hai ya nahi
+            for (int i = 0; i < n; i++) {
+                if (resultant[i] != 0) {
+                    allZeroes = false;
+                    break;
+                }
+            }
+
+            // Agar sab zero hai toh valid configuration mila → result update karo
+            if (allZeroes) {
+                result = Math.max(result, count);
+            }
+            return;
+        }
+
+        // Current request se from → to transfer ho raha hai
+        int from = requests[idx][0];
+        int to = requests[idx][1];
+
+        // ✅ Option 1: Include current request
+        resultant[from]++;  // from building se ek banda gaya
+        resultant[to]--;    // to building me ek banda aaya
+        helper(count + 1, idx + 1, n, requests, resultant);  // move to next request
+        // 🔙 Backtrack (undo inclusion)
+        resultant[from]--;
+        resultant[to]++;
+
+        // ❌ Option 2: Exclude current request
+        helper(count, idx + 1, n, requests, resultant);
+    }
+}
